@@ -10,6 +10,27 @@
 # so file-change events fire reliably on Windows/WSL2 without polling.
 
 services:
+  frontend:
+    image: foc-frontend-dev
+    build:
+      context: ./frontend
+      target: dev
+    container_name: foc-frontend
+    restart: "no"
+    ports: !override
+      - "${FRONTEND_PORT:-5173}:5173"
+    environment:
+      FRONTEND_API_PROXY_TARGET: http://order-service:3000
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.js:/app/vite.config.js
+      - ./frontend/tailwind.config.js:/app/tailwind.config.js
+      - ./frontend/postcss.config.js:/app/postcss.config.js
+    depends_on:
+      order-service:
+        condition: service_started
+
   order-service:
     build:
       target: dev

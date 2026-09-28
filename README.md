@@ -103,3 +103,5 @@ One row per entry in [/ai/usage-log.md](ai/usage-log.md), newest at the bottom. 
 | 2026-09-27 | user-service   | Stage 12d: /users/me/verify-otp and /users/me/resend-otp                         | Authenticated OTP routes finalizing email change and resending change_email/password OTPs  |
 | 2026-09-27 | user-service   | Stage 12e: Change Password — Initiate + Confirm                                  | Two-step password change with OTP, revoking all refresh tokens on success                  |
 | 2026-09-28 | order-service  | order-service: Prisma Order Seed Fixtures                                        | Added deterministic fixtures covering statuses, locations, and credit amounts              |
+| 2026-09-28 | frontend       | Create product frontend from mockup                                              | Created live order frontend, Docker service, and documented backend gaps                   |
+| 2026-09-28 | frontend       | Fix localhost connection after Compose target switch                             | Separated dev and production frontend image tags and restored port 5173                    |

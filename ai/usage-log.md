@@ -770,6 +770,34 @@ Verification actually run: `npx tsc --noEmit` and `npm run build` both exit 0. *
 
 **Author review:**
 
+## 2026-09-28 — frontend: Fix localhost connection after Compose target switch
+
+**Tool:** GitHub Copilot
+**Mode:** debug, refactor, docs
+**Scope:** Debugging, Boilerplate, Refactor/Docs
+**Governing decision:** Existing frontend Compose setup and the user's localhost error report.
+
+**Prompts (exact):**
+
+> localhost refused to connect.
+
+**Key responses:**
+Diagnosed that the running `foc-frontend` container was the development Vite image without a host port mapping, while production Compose expected nginx on `5173:80`. Rebuilt and recreated the production frontend, confirmed nginx was running, and added a distinct `foc-frontend-dev` image tag to the dev override to prevent dev/production image reuse. Frontend HTTP returned 200; the order database and order service remained healthy.
+
+**Files:**
+
+- `compose.dev.yaml` (modified)
+- `frontend/AI_NOTES.md` (modified)
+- `README.md` (modified: Log index row)
+- `ai/usage-log.md` (modified)
+
+**Deviations / questions raised for the team:**
+None.
+
+**What I kept/changed/rejected:**
+
+**Author review:**
+
 ---
 
 ## 2026-09-26 — Recess iteration: Credit Service verification run
@@ -1285,3 +1313,59 @@ None as spec ambiguities — see the concurrency observation above (informationa
 
 **What I kept/changed/rejected:**
 Accepted all changes.
+
+## 2026-09-28 — frontend: Create product frontend from mockup
+
+**Tool:** GitHub Copilot
+**Mode:** generate, refactor, docs
+**Scope:** Implementation code, Boilerplate, Refactor/Docs
+**Governing decision:** User request in chat; existing mockup stack and existing Compose conventions.
+
+**Prompts (exact):**
+
+> I want to turn our existing `foc-mockup/` into the starting point for the actual frontend. First, inspect the repo and understand the existing frontend, backend, Docker/Compose setup, and the structure of `foc-mockup/`. Keep `foc-mockup/`, create a new `frontend/`, remove dummy data from the real frontend, connect to existing APIs or clearly document missing backend APIs, add frontend Docker/Compose setup, keep original mockup AI notes, create `frontend/AI_NOTES.md`, verify frontend and Compose.
+
+**Key responses:**
+Inspected the mockup, backend routes, Dockerfiles, Compose files, and repository AI policy. Created `frontend/` using the existing Vite/React/Tailwind stack, reused the mockup stylesheet, logo, and button, and connected only to the existing `GET /orders` endpoint. Demo supplier, request, user, wallet, transaction, and message data was not copied. Added explicit documentation for backend gaps, a production nginx image, a development image, and Compose services. `npm install && npm run build` passed; `docker compose config --quiet` passed. The first build command was run from the repository root and failed because there is no root package.json; it was rerun from `frontend/` successfully.
+
+**Files:**
+
+- `frontend/` (created)
+- `compose.yaml` (modified)
+- `compose.dev.yaml` (modified)
+- `README.md` (modified: Log index row)
+- `ai/usage-log.md` (modified)
+
+**Deviations / questions raised for the team:**
+No API routes or backend contracts were invented. Supplier, auth, credit balance/transactions, and order mutation APIs remain needed before those product flows can be connected.
+
+**What I kept/changed/rejected:**
+
+**Author review:**
+
+## 2026-09-28 — frontend: Fix Compose Watch frontend port mapping
+
+**Tool:** GitHub Copilot
+**Mode:** debug, refactor, docs
+**Scope:** Debugging, Boilerplate, Refactor/Docs
+**Governing decision:** Existing frontend Compose setup and the user's Compose Watch request.
+
+**Prompts (exact):**
+
+> it's not working with `docker compose -f compose.yaml -f compose.dev.yaml up --build --watch`
+
+**Key responses:**
+Reproduced the exact command and found that the merged dev configuration inherited both `5173:80` and `5173:5173`, leaving the frontend without a usable host binding. Changed the dev override to replace the production port list, leaving only `5173:5173`, then restarted Compose Watch. The frontend now publishes `0.0.0.0:5173->5173/tcp` and returns HTTP 200.
+
+**Files:**
+
+- `compose.dev.yaml` (modified)
+- `frontend/AI_NOTES.md` (modified)
+- `ai/usage-log.md` (modified)
+
+**Deviations / questions raised for the team:**
+None.
+
+**What I kept/changed/rejected:**
+
+**Author review:**

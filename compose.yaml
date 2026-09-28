@@ -44,7 +44,13 @@ services:
       order-db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://localhost:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -54,7 +60,7 @@ services:
   # AI Assistance Disclosure:
   # Tool: Claude Code (claude-sonnet-5), date: 2026-09-24
   #   24/09/2026: Stage 3b - user-db + user-service compose services
-  #     Author review: No changes needed. 
+  #     Author review: No changes needed.
   #   26/09/2026: Stage 7 - publish user-db on host port 5434 for the test suite (REVERSE BEFORE DEPLOY)
   #     Author review:
   user-db:
@@ -147,11 +153,30 @@ services:
       credit-db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://localhost:3003/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://localhost:3003/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
       interval: 10s
       timeout: 3s
       retries: 5
       start_period: 15s
+
+  # ---- frontend --------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      target: production
+    container_name: foc-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+    depends_on:
+      order-service:
+        condition: service_healthy
 
 volumes:
   order-db-data:

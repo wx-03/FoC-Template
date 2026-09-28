@@ -1,0 +1,11 @@
+#
+# AI Assistance Disclosure:
+# Tool: GitHub Copilot, date: 2026-09-28
+# Scope: Excluded local dependency and build artifacts from the frontend Docker context.
+#        No requirements, architecture, schema, or API decisions were made by the AI tool.
+# Author review:
+
+node_modules
+dist
+*.log
+.DS_Store

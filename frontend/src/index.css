@@ -1,0 +1,90 @@
+/*
+ * AI Assistance Disclosure:
+ * Tool: GitHub Copilot, date: 2026-09-28
+ * Scope: Reused the original mockup stylesheet and added product-only layout states.
+ *        No requirements, architecture, schema, or API decisions were made by the AI tool.
+ * Author review:
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #000000;
+  --ink-70: #4a4a4a;
+  --ink-40: #8a8a8a;
+  --line: #e4e4e4;
+  --surface: #ffffff;
+  --surface-alt: #f7f7f7;
+  --orange: #ef7c00;
+  --blue: #003d7c;
+  --alert: #b3261e;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-surface text-ink font-sans text-base antialiased;
+    margin: 0;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+  }
+  :where(
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    summary,
+    [tabindex]
+  ):focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::placeholder {
+    color: var(--ink-40);
+    opacity: 1;
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: "Bricolage Grotesque", Georgia, serif;
+    letter-spacing: -0.03em;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+  .page-gutter {
+    @apply px-4 md:px-6 lg:px-10;
+  }
+  .page-width {
+    @apply mx-auto w-full max-w-page;
+  }
+  .card {
+    @apply rounded-card border border-line bg-surface;
+  }
+  .hide-scrollbar {
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  .product-panel {
+    @apply rounded-card border border-line bg-surface p-5 md:p-7;
+  }
+  .product-link {
+    @apply font-medium text-blue underline-offset-4 hover:underline;
+  }
+}
